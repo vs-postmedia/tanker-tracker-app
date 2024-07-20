@@ -2,20 +2,22 @@
     // COMPONENTS
     import { onMount } from 'svelte';
     import { csvParse } from 'd3-dsv';
-    import Chart from "$components/Chart.svelte";
-    import Select from "svelte-select"; // https://github.com/rob-balfre/svelte-select
+    import Topline from "$components/Topline.svelte";
 
     // DATA
     // import data from "$data/data.js";
-    import { menuItems } from "$data/menu-items";
-    const dataUrl = 'https://raw.githubusercontent.com/ajstarks/dubois-data-portraits/master/challenge/2024/challenge03/data.csv';
+    // import { menuItems } from "$data/menu-items";
 
     // VARIABLES
-    let data, value;
-    const defaultSelectValue = menuItems[0].value;
+    let data;
+    let count = 122575;
+    const monthlyShips = {
+        dimensions: 'width:100%;height:300px;',
+        url: 'https://flo.uri.sh/visualisation/18776706/embed'
+    };
 
     // REACTIVE VARIABLES
-    $: value, updateData(value);
+    // $: value, updateData(value);
 
     async function fetchData(url) {
         const resp = await fetch(url);
@@ -23,43 +25,24 @@
         return csvParse(data);
     }
 
-
-    function updateData(value) {
-        if (!value || !value.value) return;
-
-        console.log(value);
-    }
-
     async function init() {
         // fetch remote data
         data = await fetchData(dataUrl);
-        // console.log(data);
-
-        // default display selector value
-		value = defaultSelectValue;
+        console.log(data);
     }
 
     onMount(init);
 </script>
 
-<header>
-    <h1>VS SvelteKit Template</h1>
-    <p class="subhead">Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-</header>
-
 <main>
-    <Select items={menuItems}
-        bind:value
-        change={updateData}
-        placeholder="Pick a city..."
-		showChevron="true"
-		listOpen={false}
+    <!-- this can't load until  -->
+    <Topline 
+        count={count}
     />
-    
-    <Chart 
-        data={data}
-        value={value}
-    />
+
+
+    <!-- MONTHLY SHIPS -->
+    <iframe src={monthlyShips.url} title='Monthly tanker traffic' class='flourish-embed-iframe' frameborder='0' scrolling='no' style={monthlyShips.dimensions} sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18627199/?utm_source=embed&utm_campaign=visualisation/18627199' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div>
 </main>
 
 <footer>
@@ -73,17 +56,9 @@
     @import '$css/colors.css';
     @import '$css/app.css';
 
-    header {
-		margin-bottom: 2rem;
-	}
-	header > h1 {
-		text-align: center;
-	}
-	header .subhead {
-		margin: 0 auto;
-		max-width: 525px;
-		text-align: center;
-	}
+    main {
+        margin-top: 1rem;
+    }
 
     /* COMBOBOX SELECTOR */
   	:global(.svelte-select) {

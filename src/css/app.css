@@ -21,7 +21,7 @@ body {
 /* POSTMEDIA STYLES */
 #app {
 	margin: 0 auto;
-	max-width: 750px;
+	max-width: 900px;
 }
 #app h1 {
 	color: var(--black);
@@ -32,7 +32,6 @@ body {
 #app h2 {
 	color: var(--black);
 	font-family: BentonSansCond-Bold, serif;
-	margin: 1px 0;
 }
 #app h3 {
 	color: var(--black);
