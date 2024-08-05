@@ -40,7 +40,7 @@
 
     // get total ship count
     function getTotalShips(data) {
-        console.log(data)
+        // console.log(data)
         let total = 0;
         data.forEach(d => {
             total += d.Westridge ? parseInt(d.Westridge) : 0;
@@ -57,8 +57,6 @@
         
         // total ships moored since May 1, 2024
         totalShips = getTotalShips(monthlyShipData);
-
-        console.log(totalShips)
     }
 
     onMount(init);
