@@ -2,7 +2,7 @@
     // COMPONENTS
     import { onMount } from 'svelte';
     import { csvParse } from 'd3-dsv';
-    import Topline from "$components/Topline.svelte";
+    import TotalShips from "$components/TotalShips.svelte";
     import CurrentShips from "$components/CurrentShips.svelte";
 
     // DATA
@@ -40,7 +40,6 @@
 
     // get total ship count
     function getTotalShips(data) {
-        // console.log(data)
         let total = 0;
         data.forEach(d => {
             total += d.Westridge ? parseInt(d.Westridge) : 0;
@@ -63,8 +62,10 @@
 </script>
 
 <main>
-    <!-- this can't load until  -->
-    <Topline 
+    <CurrentShips
+        data={currentShipsData}
+    />
+    <TotalShips 
         count={addCommasToNumber(totalShips)}
     />
 
@@ -73,14 +74,12 @@
     <iframe src={monthlyShipsEmbed.url} title='Monthly tanker traffic' class='flourish-embed-iframe' frameborder='0' scrolling='no' style={monthlyShipsEmbed.dimensions} sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18627199/?utm_source=embed&utm_campaign=visualisation/18627199' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div>
     
     
-    <CurrentShips
-        data={currentShipsData}
-    />
+
 </main>
 
 <footer>
     <p class="note">NOTE: tk.</p>
-    <p class="source">Source:  <a href="https:vancouversun.com" target="_blank">TK</a></p>
+    <p class="source">Sources: <a href="https://aisstream.io/" target="_blank">aisstream.io</a>, <a href="https://www.equasis.org/" target="_blank">Equasis</a></p>
 </footer>
   
 <style>

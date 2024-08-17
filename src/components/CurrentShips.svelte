@@ -4,6 +4,9 @@
     // LIBS
     import CurrentShipsTable from './CurrentShipsTable.svelte';
 
+    // CONST VARS
+    const noShipText = `There aren’t any ships moored at this terminal right now.`;
+
     // VARS
     let count;
     let suncor, westridge;
@@ -11,33 +14,46 @@
     $: tanker = count === 1 ? 'tanker' : 'tankers';
     $: count = data ? data.length : null;
     
-    // $: console.log(data)
+    $: console.log(data)
 
     $: westridge = data ? data.filter(d => d.terminal === 'Westridge') : [];
     $: suncor = data ? data.filter(d => d.terminal === 'Suncor') : [];
 </script>
 
 <div id="current-ships">
-    <h3>There {is_are} currently <span class="big-num">{count} oil {tanker}</span> moored at terminals in the Burrard Inlet.</h3>
+    <h2><span class="big-num">🛢️ {count} oil {tanker} 🛢️</span> {is_are} currently moored at terminals in the Burrard Inlet</h2>
     <div class="table-container">
-        <h3 class="westridge">Westridge</h3>
+        <h3 class="westridge">Westridge (Trans Mountain)</h3>
         <!-- svelte-ignore empty-block -->
         {#if westridge.length > 0}
             <CurrentShipsTable data={westridge} />
         {:else}
-            <p>There are currently no ships moored at the Westridge terminal</p>
+            <p>{noShipText}</p>
         {/if}
         <h3 class="suncor">Suncor</h3>
         {#if suncor.length > 0}
             <CurrentShipsTable data={suncor} />
         {:else}
-            <p>There are currently no ships moored at the Suncor terminal</p>
+            <p>{noShipText}</p>
         {/if}
     </div>
 </div>
 
 
 <style>
+    .topline-text {
+        font-size: 2.4rem;
+        line-height: 1.65rem;
+        margin: 0 auto 1rem auto;
+        max-width: 95%;
+        text-align: center;
+    }
+    .big-num {
+        color: #A62F22;
+        display: block;
+        font-size: 2.9rem;
+        margin-bottom: 25px;
+    }
     #current-ships .westridge {
 		/* color: #A62F22; */
         color: #367dad;
@@ -49,13 +65,14 @@
         font-family: 'BentonSansCond-Bold';
   	}
     #current-ships {
-        margin-top: 2.35rem;
+        margin: 2.35rem 0 3rem 0;
     }
-    #current-ships h3 {
-        font-size: 1.2rem;
-        line-height: 1.45rem;
-        margin: 0.5rem auto;
-        /* text-align: center; */
+    #current-ships h2 {
+        font-size: 1.55rem;
+        line-height: 2rem;
+        margin: 1rem auto;
+        max-width: 90%;
+        text-align: center;
     }
     #current-ships .big-num {
         color: #A62F22;
