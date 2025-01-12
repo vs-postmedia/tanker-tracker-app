@@ -62,26 +62,26 @@
             datasets: [
                 {
                     label: terminals[0],
-                    // default to 0 if empty value
-                    data: inputData.map(d => parseFloat(d[terminals[0]]) || 0),
+                    data: inputData.map(d => parseFloat(d[terminals[0]]) || 0), // default to 0 if empty value
                     fill: true,
                     backgroundColor: `${seriesColors[0]}, ${fillOpacity})`,
                     borderColor: `${seriesColors[0]})`,
+                    borderWidth: 2,
                     pointRadius: 0,
                     pointHitRadius: 50,
-                    stepped: true
+                    stepped: 'middle'
                 },
                 {
                     label: terminals[1],
-                    // default to 0 if empty value
-                    data: inputData.map(d => parseFloat(d[terminals[1]]) || 0),
+                    data: inputData.map(d => parseFloat(d[terminals[1]]) || 0), // default to 0 if empty value
                     fill: true,
                     backgroundColor: `${seriesColors[1]}, ${fillOpacity})`,
                     borderColor: `${seriesColors[1]})`,
+                    borderWidth: 2,
                     pointRadius: 0,
                     pointHoverRadius: 10,
                     pointHitRadius: 50,
-                    stepped: true
+                    stepped: 'middle'
                 }
             ]
         }
@@ -102,17 +102,17 @@
 </script>
 
 <main>
-    <CurrentShips
-        data={currentShipsData}
-    />
-    <TotalShips 
-        count={addCommasToNumber(totalShips)}
-    />
-
     <MonthlyShipChart 
         data={areaChartData}
         chartOptions={areaChartOptions}
+        count={totalShips}
     />
+
+    <CurrentShips
+        data={currentShipsData}
+    />
+
+
 </main>
 
 <footer>

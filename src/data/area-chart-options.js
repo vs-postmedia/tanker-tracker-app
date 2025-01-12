@@ -2,8 +2,30 @@ export const areaChartOptions = {
     responsive: true,
     plugins: {
         legend: {
-        position: 'top',
+            align: 'start',
+            labels: {
+                boxHeight: 15,
+                boxWidth: 15
+            },
+            position: 'top',
         },
+        tooltip: {
+            enabled: true, // Enable tooltips
+            intersect: false, // Show tooltips even if not directly over a point
+            mode: 'index', // Show tooltips for all datasets at the hovered index
+            itemSort: (a,b) => {
+                return a.dataset.label.localeCompare(b.dataset.label)
+            },
+            callbacks: {
+                // Customize tooltip labels
+                label: function (tooltipItem) {
+                    return `${tooltipItem.dataset.label}: ${tooltipItem.raw} tankers`;
+                },
+                title: function (tooltipItems) {
+                    return `${tooltipItems[0].label}`;
+                }
+            }
+        }
     },
     scales: {
         x: {
@@ -23,19 +45,5 @@ export const areaChartOptions = {
             },
             stacked: true
         },
-    },
-    tooltip: {
-        enabled: true, // Enable tooltips
-        mode: 'index', // Show tooltips for all datasets at the hovered index
-        intersect: false, // Show tooltips even if not directly over a point
-        callbacks: {
-            // Customize tooltip labels
-            label: function (tooltipItem) {
-                return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
-            },
-            title: function (tooltipItems) {
-                return `Month: ${tooltipItems[0].label}`;
-            }
-        }
     }
 };

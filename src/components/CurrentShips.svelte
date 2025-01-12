@@ -45,6 +45,21 @@
 
 
 <style>
+    #current-ships {
+        margin-top: 75px;
+    }
+    #current-ships h2 {
+        font-size: 1.55rem;
+        line-height: 1.7rem;
+        margin: 1rem auto 1.75rem auto;
+        max-width: 90%;
+        text-align: center;
+    }
+    #current-ships .big-num {
+        color: #A62F22;
+        font-family: 'BentonSansCond-Bold' !important;
+        /* font-size: rem; */
+    }
     .topline-text {
         font-size: 2.4rem;
         line-height: 1.65rem;
@@ -55,8 +70,8 @@
     .big-num {
         color: #A62F22;
         display: block;
-        font-size: 2.9rem;
-        margin-bottom: 25px;
+        font-size: 2.3rem;
+        margin-bottom: 15px;
     }
     #current-ships .westridge {
         color: #367dad;
@@ -70,19 +85,4 @@
         color: #22a6b3;
         font-family: 'BentonSansCond-Bold';
   	}
-    #current-ships {
-        margin: 2.35rem 0 3rem 0;
-    }
-    #current-ships h2 {
-        font-size: 1.55rem;
-        line-height: 2rem;
-        margin: 1rem auto;
-        max-width: 90%;
-        text-align: center;
-    }
-    #current-ships .big-num {
-        color: #A62F22;
-        font-family: 'BentonSansCond-Bold' !important;
-        /* font-size: rem; */
-    }
 </style>
