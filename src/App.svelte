@@ -2,18 +2,19 @@
     // COMPONENTS
     import { onMount } from 'svelte';
     import { csvParse } from 'd3-dsv';
-    // import { stack } from 'layercake';
     import { timeParse, timeFormat } from 'd3-time-format';
-    import TotalShips from "$components/TotalShips.svelte";
-    import CurrentShips from "$components/CurrentShips.svelte";
-    import MonthlyShipChart from "$components/MonthlyShipChart.svelte";
-    
+    import { areaChartOptions } from '$data/area-chart-options.js';  // Configuration for stacked area chart
+    import TotalShips from '$components/TotalShips.svelte';
+    import CurrentShips from '$components/CurrentShips.svelte';
+    import MonthlyShipChart from '$components/MonthlyShipChart.svelte';
 
     // DATA
     const currentShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/master/data/current-ships.json';
     const monthlyShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/refs/heads/master/data/output/ships-monthly.csv';
 
     // VARIABLES
+    $: totalShips = 0;
+    $: areaChartData = [];
     let chartData, currentShipsData, monthlyShipData, seriesNames;
     const fillOpacity = '0.3';
     const formatDate = timeFormat("%b ’%y");
@@ -21,51 +22,7 @@
     const seriesColors = ['rgba(53, 162, 235', 'rgba(75, 192, 192', 'rgba(255, 99, 132'];
     // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
-    $: totalShips = 0;
-    $: areaChartData = [];
-    
-    // Configuration for stacked area chart
-    const areaChartOptions = {
-        responsive: true,
-        plugins: {
-            legend: {
-            position: 'top',
-            },
-        },
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                    drawTicks: true
-                },
-                stacked: true,
-            },
-            y: {
-                beginAtZero: true,
-                border: {
-                    display: false
-                },
-                grid: {
-                    drawTicks: false
-                },
-                stacked: true
-            },
-        },
-        tooltip: {
-            enabled: true, // Enable tooltips
-            mode: 'index', // Show tooltips for all datasets at the hovered index
-            intersect: false, // Show tooltips even if not directly over a point
-            callbacks: {
-                // Customize tooltip labels
-                label: function (tooltipItem) {
-                    return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
-                },
-                title: function (tooltipItems) {
-                    return `Month: ${tooltipItems[0].label}`;
-                }
-            }
-        }
-    };
+
 
     // Add commas to numbers
     function addCommasToNumber(number) {
@@ -156,14 +113,6 @@
         data={areaChartData}
         chartOptions={areaChartOptions}
     />
-
-
-    
-    <!-- MONTHLY SHIPS -->
-    <!-- <iframe src={monthlyShipsEmbed.url} title='Monthly tanker traffic' class='flourish-embed-iframe' frameborder='0' scrolling='no' style={monthlyShipsEmbed.dimensions} sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18627199/?utm_source=embed&utm_campaign=visualisation/18627199' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div> -->
-    
-    
-
 </main>
 
 <footer>
