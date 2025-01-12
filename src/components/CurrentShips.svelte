@@ -8,15 +8,13 @@
     const noShipText = `There aren’t any ships moored at this terminal right now.`;
 
     // VARS
-    let count;
-    let suncor, westridge;
+    // let parkland, suncor, westridge;
     $: is_are = count === 1 ? 'is' : 'are';
     $: tanker = count === 1 ? 'tanker' : 'tankers';
     $: count = data ? data.length : null;
-    
-    $: console.log(data)
 
     $: westridge = data ? data.filter(d => d.terminal === 'Westridge') : [];
+    $: parkland = data ? data.filter(d => d.terminal === 'Parkland') : [];
     $: suncor = data ? data.filter(d => d.terminal === 'Suncor') : [];
 </script>
 
@@ -33,6 +31,12 @@
         <h3 class="suncor">Suncor</h3>
         {#if suncor.length > 0}
             <CurrentShipsTable data={suncor} />
+        {:else}
+            <p>{noShipText}</p>
+        {/if}
+        <h3 class="parkland">Parkland</h3>
+        {#if parkland.length > 0}
+            <CurrentShipsTable data={parkland} />
         {:else}
             <p>{noShipText}</p>
         {/if}
@@ -55,13 +59,15 @@
         margin-bottom: 25px;
     }
     #current-ships .westridge {
-		/* color: #A62F22; */
         color: #367dad;
         font-family: 'BentonSansCond-Bold';
   	}
   	#current-ships .suncor {
-		/* color: #22a6b3; */
         color: #8FB9DE;
+        font-family: 'BentonSansCond-Bold';
+  	}
+    #current-ships .parkland {
+        color: #22a6b3;
         font-family: 'BentonSansCond-Bold';
   	}
     #current-ships {

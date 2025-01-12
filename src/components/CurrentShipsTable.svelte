@@ -13,7 +13,6 @@
         <p class="detail-line"><a href='{urlFrag}{d.ImoNumber}' target="_blank">{d.ImoNumber}</a> is a crude oil tanker built in XXXX. It has carrying capacity of <strong style='{color}'>XXX tonnes</strong>.</p>
     {/each}
 </div>
-<!-- #current-ships > div > h3.westridge.s-AW6-LcrF2zM7 -->
 
 <style>
     :global(.table-container > h3) {

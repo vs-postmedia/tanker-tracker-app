@@ -2,20 +2,69 @@
     // COMPONENTS
     import { onMount } from 'svelte';
     import { csvParse } from 'd3-dsv';
+    // import { stack } from 'layercake';
+    import { timeParse, timeFormat } from 'd3-time-format';
     import TotalShips from "$components/TotalShips.svelte";
     import CurrentShips from "$components/CurrentShips.svelte";
+    import MonthlyShipChart from "$components/MonthlyShipChart.svelte";
+    
 
     // DATA
     const currentShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/master/data/current-ships.json';
-    const monthlyShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/master/data/ships-monthly.csv';
+    const monthlyShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/refs/heads/master/data/output/ships-monthly.csv';
 
     // VARIABLES
-    let currentShipsData, monthlyShipData;
+    let chartData, currentShipsData, monthlyShipData, seriesNames;
+    const fillOpacity = '0.3';
+    const formatDate = timeFormat("%b ’%y");
+    const parseDatetime = timeParse('%Y-%m');
+    const seriesColors = ['rgba(53, 162, 235', 'rgba(75, 192, 192', 'rgba(255, 99, 132'];
+    // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
+
     $: totalShips = 0;
-    $: monthlyShips = 0;
-    const monthlyShipsEmbed = {
-        dimensions: 'width:100%;height:300px;',
-        url: 'https://flo.uri.sh/visualisation/18776706/embed'
+    $: areaChartData = [];
+    
+    // Configuration for stacked area chart
+    const areaChartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+            position: 'top',
+            },
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                    drawTicks: true
+                },
+                stacked: true,
+            },
+            y: {
+                beginAtZero: true,
+                border: {
+                    display: false
+                },
+                grid: {
+                    drawTicks: false
+                },
+                stacked: true
+            },
+        },
+        tooltip: {
+            enabled: true, // Enable tooltips
+            mode: 'index', // Show tooltips for all datasets at the hovered index
+            intersect: false, // Show tooltips even if not directly over a point
+            callbacks: {
+                // Customize tooltip labels
+                label: function (tooltipItem) {
+                    return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+                },
+                title: function (tooltipItems) {
+                    return `Month: ${tooltipItems[0].label}`;
+                }
+            }
+        }
     };
 
     // Add commas to numbers
@@ -49,15 +98,49 @@
         return total;
     }
 
+    function formatAreaChartData(inputData) {
+        const terminals = Object.keys(inputData[0]).slice(1);
+        const formatedData = {
+            labels: inputData.map(d => formatDate(parseDatetime(d.year_month))),
+            datasets: [
+                {
+                    label: terminals[0],
+                    // default to 0 if empty value
+                    data: inputData.map(d => parseFloat(d[terminals[0]]) || 0),
+                    fill: true,
+                    backgroundColor: `${seriesColors[0]}, ${fillOpacity})`,
+                    borderColor: `${seriesColors[0]})`,
+                    pointRadius: 0,
+                    pointHitRadius: 50,
+                    stepped: true
+                },
+                {
+                    label: terminals[1],
+                    // default to 0 if empty value
+                    data: inputData.map(d => parseFloat(d[terminals[1]]) || 0),
+                    fill: true,
+                    backgroundColor: `${seriesColors[1]}, ${fillOpacity})`,
+                    borderColor: `${seriesColors[1]})`,
+                    pointRadius: 0,
+                    pointHoverRadius: 10,
+                    pointHitRadius: 50,
+                    stepped: true
+                }
+            ]
+        }
+        return formatedData;
+    }
+
     async function init() {
         // fetch remote data or current & monthly ship counts
         currentShipsData = await fetchData(currentShipsUrl, 'json');
-        monthlyShipData = await fetchData(monthlyShipsUrl, 'csv')
+        monthlyShipData = await fetchData(monthlyShipsUrl, 'csv');
         
         // total ships moored since May 1, 2024
         totalShips = getTotalShips(monthlyShipData);
+        areaChartData = formatAreaChartData(monthlyShipData);
     }
-
+    
     onMount(init);
 </script>
 
@@ -69,9 +152,15 @@
         count={addCommasToNumber(totalShips)}
     />
 
+    <MonthlyShipChart 
+        data={areaChartData}
+        chartOptions={areaChartOptions}
+    />
+
+
     
     <!-- MONTHLY SHIPS -->
-    <iframe src={monthlyShipsEmbed.url} title='Monthly tanker traffic' class='flourish-embed-iframe' frameborder='0' scrolling='no' style={monthlyShipsEmbed.dimensions} sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18627199/?utm_source=embed&utm_campaign=visualisation/18627199' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div>
+    <!-- <iframe src={monthlyShipsEmbed.url} title='Monthly tanker traffic' class='flourish-embed-iframe' frameborder='0' scrolling='no' style={monthlyShipsEmbed.dimensions} sandbox='allow-same-origin allow-forms allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'></iframe><div style='width:100%!;margin-top:4px!important;text-align:right!important;'><a class='flourish-credit' href='https://public.flourish.studio/visualisation/18627199/?utm_source=embed&utm_campaign=visualisation/18627199' target='_top' style='text-decoration:none!important'><img alt='Made with Flourish' src='https://public.flourish.studio/resources/made_with_flourish.svg' style='width:105px!important;height:16px!important;border:none!important;margin:0!important;'> </a></div> -->
     
     
 
