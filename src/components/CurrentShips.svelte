@@ -8,14 +8,16 @@
     const noShipText = `There aren’t any ships moored at this terminal right now.`;
 
     // VARS
-    // let parkland, suncor, westridge;
+    $: count = data ? data.length : null;
     $: is_are = count === 1 ? 'is' : 'are';
     $: tanker = count === 1 ? 'tanker' : 'tankers';
-    $: count = data ? data.length : null;
-
     $: westridge = data ? data.filter(d => d.terminal === 'Westridge') : [];
     $: parkland = data ? data.filter(d => d.terminal === 'Parkland') : [];
     $: suncor = data ? data.filter(d => d.terminal === 'Suncor') : [];
+
+    // $: console.log(data)
+    // $: console.log(westridge.length, parkland.length)
+
 </script>
 
 <div id="current-ships">

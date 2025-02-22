@@ -2,7 +2,7 @@
     export let data;
     const urlFrag = 'https://www.vesselfinder.com/pro/map#vessel-details?imo=';
 
-    // $: console.log(data)
+    $: console.log(data)
 
     // set color based on terminal name
     $: color = data.length > 0 ? data[0].terminal === 'Westridge' ? 'color:#367dad' : 'color:#8FB9DE' : 'color:#000';

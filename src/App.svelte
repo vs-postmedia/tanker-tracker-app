@@ -4,22 +4,23 @@
     import { csvParse } from 'd3-dsv';
     import { timeParse, timeFormat } from 'd3-time-format';
     import { areaChartOptions } from '$data/area-chart-options.js';  // Configuration for stacked area chart
-    import TotalShips from '$components/TotalShips.svelte';
+    import TopImoTable from '$components/TopImoTable.svelte';
     import CurrentShips from '$components/CurrentShips.svelte';
     import MonthlyShipChart from '$components/MonthlyShipChart.svelte';
 
     // DATA
     const currentShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/master/data/current-ships.json';
+    const topImoUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/refs/heads/master/data/top-imo-details.csv'
     const monthlyShipsUrl = 'https://raw.githubusercontent.com/vs-postmedia/tanker-tracker/refs/heads/master/data/output/ships-monthly.csv';
 
     // VARIABLES
     $: totalShips = 0;
     $: areaChartData = [];
-    let chartData, currentShipsData, monthlyShipData, seriesNames;
+    let chartData, currentShipsData, monthlyShipData, seriesNames, topImoData;
     const fillOpacity = '0.3';
     const formatDate = timeFormat("%b ’%y");
     const parseDatetime = timeParse('%Y-%m');
-    const seriesColors = ['rgba(53, 162, 235', 'rgba(75, 192, 192', 'rgba(255, 99, 132'];
+    const seriesColors = ['rgba(54,125,173', 'rgba(143,185,272', 'rgba(34,166,179'];
     // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
 
 
@@ -92,10 +93,14 @@
         // fetch remote data or current & monthly ship counts
         currentShipsData = await fetchData(currentShipsUrl, 'json');
         monthlyShipData = await fetchData(monthlyShipsUrl, 'csv');
+        topImoData = await fetchData(topImoUrl, 'csv');
+
+        console.log(monthlyShipData)
         
         // total ships moored since May 1, 2024
         totalShips = getTotalShips(monthlyShipData);
         areaChartData = formatAreaChartData(monthlyShipData);
+        console.log(areaChartData)
     }
     
     onMount(init);
@@ -112,11 +117,16 @@
         data={currentShipsData}
     />
 
+    <!-- svelte-ignore missing-declaration -->
+    <TopImoTable
+        data={topImoData}
+    />
+
 
 </main>
 
 <footer>
-    <p class="note">NOTE: tk.</p>
+    <p class="note">Last update: tk</p>
     <p class="source">Sources: <a href="https://aisstream.io/" target="_blank">aisstream.io</a>, <a href="https://www.equasis.org/" target="_blank">Equasis</a></p>
 </footer>
   

@@ -41,7 +41,7 @@
     .big-num {
         color: #A62F22;
         display: block;
-        font-size: 3rem;
+        font-size: 2.8rem;
         padding: 18px 0;
         /* margin-right: 5px; */
     }
