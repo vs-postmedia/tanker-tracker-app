@@ -22,8 +22,12 @@
     const parseDatetime = timeParse('%Y-%m');
     const seriesColors = ['rgba(54,125,173', 'rgba(143,185,272', 'rgba(34,166,179'];
     // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'];
-
-
+    const terminalColors = { 
+        Westridge: '#367dad', 
+        Suncor: '#8FB9DE', 
+        Parkland: '#22a6b3', 
+        Kitimat: '#231F20' 
+    };
 
     // Add commas to numbers
     function addCommasToNumber(number) {
@@ -47,10 +51,13 @@
 
     // get total ship count
     function getTotalShips(data) {
+        console.log(data)
         let total = 0;
         data.forEach(d => {
             total += d.Westridge ? parseInt(d.Westridge) : 0;
             total += d.Suncor ? parseInt(d.Suncor) : 0;
+            total += d.Parkland ? parseInt(d.Parkland) : 0;
+            // total += d.Kitimat ? parseInt(d.Kitimat) : 0;
         });
 
         return total;
@@ -95,12 +102,12 @@
         monthlyShipData = await fetchData(monthlyShipsUrl, 'csv');
         topImoData = await fetchData(topImoUrl, 'csv');
 
-        console.log(monthlyShipData)
         
         // total ships moored since May 1, 2024
         totalShips = getTotalShips(monthlyShipData);
         areaChartData = formatAreaChartData(monthlyShipData);
-        console.log(areaChartData)
+        
+        console.log(currentShipsData)
     }
     
     onMount(init);
@@ -118,9 +125,9 @@
     />
 
     <!-- svelte-ignore missing-declaration -->
-    <TopImoTable
+    <!-- <TopImoTable
         data={topImoData}
-    />
+    /> -->
 
 
 </main>
@@ -140,20 +147,18 @@
         margin-top: 1rem;
     }
 
-    /* COMBOBOX SELECTOR */
-  	:global(.svelte-select) {
-		margin: 1rem auto !important;
-		max-width: 250px;
-  	}
-  	:global(input:focus) {
-		outline: none;
-  	}
-
-	:global(
-		.svelte-select .selected-item,
-		.svelte-select .item,
-		.svelte-select input
-	) {
-		font-family: 'BentonSansCond-Regular', sans;
-	}
+    /* Terminal colours */
+    :global(.westridge) {
+        color: #367dad;
+    }
+    :global(.suncor) {
+        color: #8FB9DE;
+    }
+    :global(.parkland) {
+        color: #22a6b3;
+    }
+    :global(kitimat) {
+        color: #231F20;
+    }
+  	
 </style>

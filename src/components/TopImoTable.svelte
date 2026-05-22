@@ -7,12 +7,12 @@
         return s.toLowerCase()
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join( ' ')
+            .join(' ')
     }
 </script>
 
 <section id="top-imo">
-    <h2>🛢️ Tankers with the most visits 🛢️</h2>
+    <h2>🛢️ Top ships 🛢️</h2>
     <table>
         <thead></thead>
         <tbody>
@@ -42,13 +42,14 @@
     }
     #top-imo td {
         padding: 3px 5px;
-        line-height: 1.3;
+        line-height: 1.2;
     }
     #top-imo td.ship-name{
         min-width: 50%
     }
     #top-imo td .highlight {
         color: #A62F22;
+        font-size:1.1rem;
         font-weight: 800;
     }
 </style>

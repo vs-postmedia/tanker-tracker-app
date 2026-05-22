@@ -1,29 +1,59 @@
 <script>
     export let data;
-    const urlFrag = 'https://www.vesselfinder.com/pro/map#vessel-details?imo=';
+    
+    // LIBS
+    import CurrentShipsTableRow from './CurrentShipsTableRow.svelte';
 
-    $: console.log(data)
+    // CONST VARS
+    const noShipText = `There aren’t any ships moored at this terminal right now.`;
 
-    // set color based on terminal name
-    $: color = data.length > 0 ? data[0].terminal === 'Westridge' ? 'color:#367dad' : 'color:#8FB9DE' : 'color:#000';
+    // VARS
+    // $: count = data ? data.length : null;
+    // $: is_are = count === 1 ? 'is' : 'are';
+    // $: tanker = count === 1 ? 'tanker' : 'tankers';
+    $: westridge = data ? data.filter(d => d.terminal === 'Westridge') : [];
+    $: parkland = data ? data.filter(d => d.terminal === 'Parkland') : [];
+    $: suncor = data ? data.filter(d => d.terminal === 'Suncor') : [];
+    $: kitimat = data ? data.filter(d => d.terminal === 'Kitimat') : [];
+
+    // $: console.log(data)
+    // $: console.log(westridge.length, parkland.length)
+
 </script>
 
-<div class="ship-details">
-    {#each data as d}
-        <p class="detail-line"><a href='{urlFrag}{d.ImoNumber}' target="_blank">{d.ImoNumber}</a> is a crude oil tanker built in XXXX. It has carrying capacity of <strong style='{color}'>XXX tonnes</strong>.</p>
-    {/each}
+<!-- TABLE -->
+<div id="table-container">
+    <h3 class="westridge">Westridge (Trans Mountain)</h3>
+    <!-- svelte-ignore empty-block -->
+    {#if westridge.length > 0}
+        <CurrentShipsTableRow data={westridge} />
+    {:else}
+        <p>{noShipText}</p>
+    {/if}
+    <h3 class="suncor">Suncor</h3>
+    {#if suncor.length > 0}
+        <CurrentShipsTableRow data={suncor} />
+    {:else}
+        <p>{noShipText}</p>
+    {/if}
+    <h3 class="parkland">Parkland</h3>
+    {#if parkland.length > 0}
+        <CurrentShipsTableRow data={parkland} />
+    {:else}
+        <p>{noShipText}</p>
+    {/if}
+    <h3 class="kitimat">Kitimat</h3>
+    {#if kitimat.length > 0}
+        <CurrentShipsTableRow data={kitimat} />
+    {:else}
+        <p>{noShipText}</p>
+    {/if}
 </div>
 
-<style>
-    :global(.table-container > h3) {
-        font-size: 1.5rem;
-        margin: 16px 0 8px 0;
-    }
-    .detail-line {
-        padding-bottom: 7px;
-    }
 
-    .detail-line > strong {
-        font-family: 'BentonSansCond-Bold';
+<style>
+    #table-container {
+        margin: 0 auto;
+        max-width: 90%;
     }
 </style>
